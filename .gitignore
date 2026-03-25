@@ -1,0 +1,6 @@
+/vendor/
+/web/core/
+/web/sites/default/files/
+/.env
+.DS_Store
+node_modules/
