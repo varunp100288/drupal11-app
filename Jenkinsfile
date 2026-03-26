@@ -18,7 +18,19 @@ pipeline {
                 sh 'ls -la'
             }
         }
-
+                stage('Create .env') {
+            steps {
+                sh '''
+                    cat > .env <<EOF
+DB_HOST=host.docker.internal
+DB_PORT=32772
+DB_NAME=db
+DB_USER=db
+DB_PASSWORD=db
+EOF
+                '''
+            }
+        }
         stage('Build Containers') {
             steps {
                 sh 'docker compose build'
