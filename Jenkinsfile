@@ -54,7 +54,7 @@ EOF
         }
         stage('Install Composer Dependencies') {
     steps {
-        sh 'docker compose exec -T drupal-app composer install'
+        sh 'docker compose exec -T drupal composer install'
     }
 }
 
