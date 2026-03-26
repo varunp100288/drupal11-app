@@ -6,14 +6,6 @@ pipeline {
     }
 
     stages {
-        stage('Force Clean Workspace') {
-            steps {
-                sh '''
-                    sudo rm -rf *
-                '''
-            }
-        }
-
         stage('Checkout') {
             steps {
                 git branch: 'main', url: 'https://github.com/varunp100288/drupal11-app.git'
@@ -45,17 +37,7 @@ EOF
 
         stage('Composer Install') {
             steps {
-                sh '''
-                    docker compose exec -T drupal composer install
-                '''
-            }
-        }
-
-        stage('Fix Permissions (CRITICAL)') {
-            steps {
-                sh '''
-                    sudo chown -R jenkins:jenkins "$WORKSPACE"
-                '''
+                sh 'docker compose exec -T drupal composer install'
             }
         }
     }
