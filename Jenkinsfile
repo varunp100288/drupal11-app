@@ -52,6 +52,11 @@ EOF
                 sh 'docker compose up -d'
             }
         }
+        stage('Install Composer Dependencies') {
+    steps {
+        sh 'docker compose exec -T drupal-app composer install'
+    }
+}
 
         stage('Check Running Containers') {
             steps {
