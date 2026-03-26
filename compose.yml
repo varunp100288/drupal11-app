@@ -1,0 +1,14 @@
+services:
+  drupal:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: drupal-app
+    ports:
+      - "8081:80"
+    volumes:
+      - ./:/var/www/html
+    env_file:
+      - .env
+    extra_hosts:
+      - "host.docker.internal:host-gateway"

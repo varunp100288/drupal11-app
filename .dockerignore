@@ -1,0 +1,12 @@
+.git
+.github
+.ddev
+vendor
+node_modules
+web/sites/default/files
+web/sites/default/settings.local.php
+web/sites/default/services.local.yml
+.env
+.idea
+.vscode
+tmp
