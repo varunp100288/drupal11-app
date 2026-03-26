@@ -1,29 +1,58 @@
 pipeline {
     agent any
 
+    environment {
+        COMPOSE_PROJECT_NAME = 'drupalapp'
+    }
+
     stages {
         stage('Checkout') {
             steps {
-                echo 'Code checkout stage'
+                git branch: 'main', url: 'https://github.com/varunp100288/drupal11-app.git'
             }
         }
 
-        stage('Build') {
+        stage('Show Files') {
             steps {
-                echo 'Build stage'
+                sh 'pwd'
+                sh 'ls -la'
             }
         }
 
-        stage('Test') {
+        stage('Build Containers') {
             steps {
-                echo 'Test stage'
+                sh 'docker compose build'
+            }
+        }
+
+        stage('Stop Old Containers') {
+            steps {
+                sh 'docker compose down || true'
+            }
+        }
+
+        stage('Start Containers') {
+            steps {
+                sh 'docker compose up -d'
+            }
+        }
+
+        stage('Check Running Containers') {
+            steps {
+                sh 'docker compose ps'
+            }
+        }
+
+        stage('App Logs') {
+            steps {
+                sh 'docker compose logs --tail=50 || true'
             }
         }
     }
 
     post {
         success {
-            echo 'Pipeline completed successfully.'
+            echo 'Application build and deployment successful.'
         }
         failure {
             echo 'Pipeline failed.'
