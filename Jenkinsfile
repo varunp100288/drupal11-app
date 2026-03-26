@@ -42,7 +42,11 @@ EOF
                 sh 'docker compose down || true'
             }
         }
-
+    stage('Remove Old Container By Name') {
+    steps {
+        sh 'docker rm -f drupal-app || true'
+    }
+}
         stage('Start Containers') {
             steps {
                 sh 'docker compose up -d'
