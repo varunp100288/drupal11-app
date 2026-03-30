@@ -92,16 +92,16 @@
  */
 $databases = [];
 
-$databases['default']['default'] = [
-  'database' => getenv('DB_NAME') ?: '',
-  'username' => getenv('DB_USER') ?: '',
-  'password' => getenv('DB_PASSWORD') ?: '',
-  'prefix' => '',
-  'host' => getenv('DB_HOST') ?: '',
-  'port' => getenv('DB_PORT') ?: '3306',
-  'namespace' => 'Drupal\\Core\\Database\\Driver\\mysql',
-  'driver' => 'mysql',
-];
+// $databases['default']['default'] = [
+//   'database' => getenv('DB_NAME') ?: '',
+//   'username' => getenv('DB_USER') ?: '',
+//   'password' => getenv('DB_PASSWORD') ?: '',
+//   'prefix' => '',
+//   'host' => getenv('DB_HOST') ?: '',
+//   'port' => getenv('DB_PORT') ?: '3306',
+//   'namespace' => 'Drupal\\Core\\Database\\Driver\\mysql',
+//   'driver' => 'mysql',
+// ];
 
 /**
  * Customizing database settings.
@@ -888,9 +888,9 @@ $settings['migrate_node_migrate_type_classic'] = FALSE;
 $settings['config_sync_directory'] = '../config/sync';
 
 // Automatically generated include for settings managed by ddev. commented on 26march
-// if (getenv('IS_DDEV_PROJECT') == 'true' && file_exists(__DIR__ . '/settings.ddev.php')) {
-//   include __DIR__ . '/settings.ddev.php';
-// }
+if (getenv('IS_DDEV_PROJECT') == 'true' && file_exists(__DIR__ . '/settings.ddev.php')) {
+  include __DIR__ . '/settings.ddev.php';
+}
 
 /**
  * Load local development override configuration, if available.
@@ -909,4 +909,4 @@ $settings['config_sync_directory'] = '../config/sync';
 # if (file_exists($app_root . '/' . $site_path . '/settings.local.php')) {
 #   include $app_root . '/' . $site_path . '/settings.local.php';
 # }
-$settings['hash_salt'] = 'change-this-to-a-long-random-string-123456789';
+// $settings['hash_salt'] = 'change-this-to-a-long-random-string-123456789';
