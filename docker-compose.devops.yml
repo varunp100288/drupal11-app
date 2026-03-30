@@ -1,23 +1,6 @@
-# version: "3.8"
-
-# services:
-#   drupal:
-#     build:
-#       context: .
-#       dockerfile: Dockerfile
-#     container_name: drupal11container
-#     ports:
-#       - "8081:80"
-#     volumes:
-#       - .:/var/www/html
-#     restart: unless-stopped
-
-version: "3.8"
-
 services:
   db:
     image: mysql:8.0
-    container_name: drupal11-db
     restart: unless-stopped
     environment:
       MYSQL_DATABASE: ${DB_NAME}
@@ -38,7 +21,6 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
-    container_name: drupal11container
     depends_on:
       db:
         condition: service_healthy
@@ -52,3 +34,5 @@ services:
 
 volumes:
   drupal_db_data:
+    external: true
+    name: drupal11-app_drupal_db_data
