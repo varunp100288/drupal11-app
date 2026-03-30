@@ -19,5 +19,23 @@ pipeline {
                 '''
             }
         }
+
+        stage('Build & Run Containers') {
+            steps {
+                sh '''
+                echo "Stopping old containers if any..."
+                docker compose -f docker-compose.devops.yml down || true
+
+                echo "Building and starting containers..."
+                docker compose -f docker-compose.devops.yml up -d --build
+                '''
+            }
+        }
+
+        stage('Verify Containers') {
+            steps {
+                sh 'docker ps'
+            }
+        }
     }
 }
