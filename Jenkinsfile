@@ -35,16 +35,16 @@ pipeline {
                     string(credentialsId: 'dbrootuser', variable: 'DB_ROOT_PASSWORD')
                 ]) {
                     sh '''
-                        cat > .env <<EOF
-                            DB_NAME=${DB_NAME}
-                            DB_USER=${DB_USER}
-                            DB_PASSWORD=${DB_PASSWORD}
-                            DB_ROOT_PASSWORD=${DB_ROOT_PASSWORD}
-                            DB_HOST=${DB_HOST}
-                            DB_PORT=${DB_PORT}
-                            EOF
-                        echo ".env file created successfully"
-                    '''
+cat > .env <<EOF
+DB_NAME=${DB_NAME}
+DB_USER=${DB_USER}
+DB_PASSWORD=${DB_PASSWORD}
+DB_ROOT_PASSWORD=${DB_ROOT_PASSWORD}
+DB_HOST=${DB_HOST}
+DB_PORT=${DB_PORT}
+EOF
+echo ".env file created successfully"
+'''
                 }
             }
         }
@@ -67,30 +67,17 @@ pipeline {
         stage('Run Application Health Check') {
             steps {
                 sh '''
-                    MAX_RETRIES=10
-                    WAIT_SECONDS=10
-
-                    echo "Waiting for application to start..."
+                    echo "Waiting for application..."
                     sleep 20
-                    echo "Running health check on ${APP_URL}"
 
-                    for i in $(seq 1 $MAX_RETRIES)
-                    do
-                        STATUS=$(curl -o /dev/null -s -w "%{http_code}" ${APP_URL} || true)
+                    STATUS=$(curl -o /dev/null -s -w "%{http_code}" ${APP_URL} || true)
 
-                        if [ "$STATUS" = "200" ] || [ "$STATUS" = "302" ]; then
-                            echo "Application is healthy. HTTP Status: $STATUS"
-                            exit 0
-                        fi
-
-                        echo "Attempt $i/$MAX_RETRIES failed. Current status: $STATUS"
-                        sleep $WAIT_SECONDS
-                    done
-
-                    echo "Health check failed after $MAX_RETRIES attempts"
-                    docker compose -f docker-compose.devops.yml ps
-                    docker compose -f docker-compose.devops.yml logs --tail=50
-                    exit 1
+                    if [ "$STATUS" = "200" ] || [ "$STATUS" = "302" ]; then
+                        echo "Application is healthy. Status: $STATUS"
+                    else
+                        echo "Health check failed. Status: $STATUS"
+                        exit 1
+                    fi
                 '''
             }
         }
