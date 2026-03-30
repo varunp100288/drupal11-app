@@ -48,6 +48,17 @@ echo ".env file created successfully"
                 }
             }
         }
+        stage('Composer Validate') {
+            steps {
+                sh 'composer validate --no-check-publish'
+            }
+        }
+
+        stage('Composer Audit') {
+            steps {
+                sh 'composer audit || true'
+            }
+        }
 
         stage('Deploy Application Containers') {
             steps {
