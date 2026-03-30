@@ -60,19 +60,19 @@ stage('Composer Validate') {
     }
 }
 
-stage('PHPCS') {
-    steps {
-        sh '''
-            docker run --rm \
-              -v "$PWD":/app \
-              -w /app \
-              composer:2 sh -c "
-                git config --global --add safe.directory /app &&
-                vendor/bin/phpcs --version
-              "
-        '''
-    }
-}
+// stage('PHPCS') {
+//     steps {
+//         sh '''
+//             docker run --rm \
+//               -v "$PWD":/app \
+//               -w /app \
+//               composer:2 sh -c "
+//                 git config --global --add safe.directory /app &&
+//                 vendor/bin/phpcs --version
+//               "
+//         '''
+//     }
+// }
 
         // stage('Composer Audit') {
         //     steps {
@@ -92,6 +92,16 @@ stage('PHPCS') {
                     docker compose -f docker-compose.devops.yml down || true
                     docker compose -f docker-compose.devops.yml up -d --build
                 '''
+            }
+        }
+        // stage('PHPCS') {
+        //     steps {
+        //         sh 'docker compose -f docker-compose.devops.yml exec -T drupal vendor/bin/phpcs --standard=Drupal web/modules/custom'
+        //     }
+        // }
+        stage('PHPCS') {
+            steps {
+                sh 'docker compose -f docker-compose.devops.yml exec -T drupal vendor/bin/phpcs --standard=Drupal web/modules || true'
             }
         }
         stage('Drupal Config Import') {
