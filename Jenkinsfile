@@ -60,17 +60,31 @@ stage('Composer Validate') {
     }
 }
 
-        stage('Composer Audit') {
-            steps {
-                sh '''
-                    docker run --rm \
-                    -v "$PWD":/app \
-                    -w /app \
-                    composer:2 \
-                    composer audit || true
-                '''
-            }
-        }
+stage('PHPCS') {
+    steps {
+        sh '''
+            docker run --rm \
+              -v "$PWD":/app \
+              -w /app \
+              composer:2 sh -c "
+                git config --global --add safe.directory /app &&
+                vendor/bin/phpcs --version
+              "
+        '''
+    }
+}
+
+        // stage('Composer Audit') {
+        //     steps {
+        //         sh '''
+        //             docker run --rm \
+        //             -v "$PWD":/app \
+        //             -w /app \
+        //             composer:2 \
+        //             composer audit || true
+        //         '''
+        //     }
+        // }
 
         stage('Deploy Application Containers') {
             steps {
