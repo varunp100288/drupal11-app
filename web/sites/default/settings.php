@@ -92,16 +92,18 @@
  */
 $databases = [];
 
-// $databases['default']['default'] = [
-//   'database' => getenv('DB_NAME') ?: '',
-//   'username' => getenv('DB_USER') ?: '',
-//   'password' => getenv('DB_PASSWORD') ?: '',
-//   'prefix' => '',
-//   'host' => getenv('DB_HOST') ?: '',
-//   'port' => getenv('DB_PORT') ?: '3306',
-//   'namespace' => 'Drupal\\Core\\Database\\Driver\\mysql',
-//   'driver' => 'mysql',
-// ];
+$databases['default']['default'] = [
+  'database' => getenv('DB_NAME') ?: '',
+  'username' => getenv('DB_USER') ?: '',
+  'password' => getenv('DB_PASSWORD') ?: '',
+  'prefix' => '',
+  'host' => getenv('DB_HOST') ?: '',
+  'port' => getenv('DB_PORT') ?: '3306',
+  'namespace' => 'Drupal\\Core\\Database\\Driver\\mysql',
+  'driver' => 'mysql',
+];
+
+$settings['hash_salt'] = 'drupal11-devops-local-hash-salt-123456789';
 
 /**
  * Customizing database settings.
@@ -299,7 +301,7 @@ $databases = [];
  *   $settings['hash_salt'] = file_get_contents('/home/example/salt.txt');
  * @endcode
  */
-$settings['hash_salt'] = '';
+// $settings['hash_salt'] = '';
 
 /**
  * Deployment identifier.

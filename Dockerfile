@@ -1,44 +1,32 @@
 FROM php:8.3-apache
 
+# Install required PHP extensions
 RUN apt-get update && apt-get install -y \
-    git \
-    unzip \
-    libzip-dev \
     libpng-dev \
-    libjpeg62-turbo-dev \
+    libjpeg-dev \
     libfreetype6-dev \
-    libicu-dev \
     libonig-dev \
     libxml2-dev \
-    libsqlite3-dev \
-    default-mysql-client \
+    zip \
+    unzip \
+    git \
+    curl \
     && docker-php-ext-configure gd --with-freetype --with-jpeg \
-    && docker-php-ext-install \
-        gd \
-        intl \
-        mbstring \
-        opcache \
-        pdo \
-        pdo_mysql \
-        zip \
-    && a2enmod rewrite headers expires \
-    && apt-get clean \
-    && rm -rf /var/lib/apt/lists/*
+    && docker-php-ext-install pdo pdo_mysql mysqli gd
 
-COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
+# Enable Apache rewrite
+RUN a2enmod rewrite
 
+# Set working directory
 WORKDIR /var/www/html
 
-COPY composer.json composer.lock ./
+# Copy project files
+COPY . /var/www/html
 
-RUN composer install --no-dev --optimize-autoloader --no-interaction
-
-COPY . .
-
-RUN chown -R www-data:www-data /var/www/html
-
+# Copy Apache virtual host config
 COPY apache/vhost.conf /etc/apache2/sites-available/000-default.conf
 
-EXPOSE 80
+# Set proper permissions
+RUN chown -R www-data:www-data /var/www/html
 
-CMD ["apache2-foreground"]
+EXPOSE 80

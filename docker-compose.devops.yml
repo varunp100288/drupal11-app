@@ -1,0 +1,54 @@
+# version: "3.8"
+
+# services:
+#   drupal:
+#     build:
+#       context: .
+#       dockerfile: Dockerfile
+#     container_name: drupal11container
+#     ports:
+#       - "8081:80"
+#     volumes:
+#       - .:/var/www/html
+#     restart: unless-stopped
+
+version: "3.8"
+
+services:
+  db:
+    image: mysql:8.0
+    container_name: drupal11-db
+    restart: unless-stopped
+    environment:
+      MYSQL_DATABASE: ${DB_NAME}
+      MYSQL_USER: ${DB_USER}
+      MYSQL_PASSWORD: ${DB_PASSWORD}
+      MYSQL_ROOT_PASSWORD: ${DB_ROOT_PASSWORD}
+    ports:
+      - "3307:3306"
+    volumes:
+      - drupal_db_data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-uroot", "-p${DB_ROOT_PASSWORD}"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+
+  drupal:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: drupal11container
+    depends_on:
+      db:
+        condition: service_healthy
+    ports:
+      - "8081:80"
+    volumes:
+      - .:/var/www/html
+    env_file:
+      - .env
+    restart: unless-stopped
+
+volumes:
+  drupal_db_data:
