@@ -48,15 +48,27 @@ echo ".env file created successfully"
                 }
             }
         }
-        stage('Composer Validate') {
-            steps {
-                sh 'composer validate --no-check-publish'
-            }
-        }
+stage('Composer Validate') {
+    steps {
+        sh '''
+            docker run --rm \
+              -v "$PWD":/app \
+              -w /app \
+              composer:2 \
+              composer validate --no-check-publish
+        '''
+    }
+}
 
         stage('Composer Audit') {
             steps {
-                sh 'composer audit || true'
+                sh '''
+                    docker run --rm \
+                    -v "$PWD":/app \
+                    -w /app \
+                    composer:2 \
+                    composer audit || true
+                '''
             }
         }
 
