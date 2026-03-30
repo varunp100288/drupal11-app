@@ -57,7 +57,13 @@ echo ".env file created successfully"
                 '''
             }
         }
-
+        stage('Drupal Config Import') {
+            steps {
+                sh 'docker compose -f docker-compose.devops.yml exec -T drupal vendor/bin/drush updb -y'
+                sh 'docker compose -f docker-compose.devops.yml exec -T drupal vendor/bin/drush cim -y'
+                sh 'docker compose -f docker-compose.devops.yml exec -T drupal vendor/bin/drush cr'
+            }
+        }
         stage('Verify Running Containers') {
             steps {
                 sh 'docker ps'
