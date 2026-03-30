@@ -1,0 +1,9 @@
+uuid: a56c8571-c235-4f98-9da6-00bb67f52b76
+langcode: en
+status: true
+dependencies: {  }
+name: DevOps
+vid: devops
+description: null
+weight: 0
+new_revision: false

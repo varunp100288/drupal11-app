@@ -2,7 +2,7 @@ _core:
   default_config_hash: ijfbzDTN4CbE7Sr-6ubWzy_t1vH4OtU1doNCLssVz-4
 langcode: en
 uuid: 32400cf8-e480-4c36-8f63-0d48f3b1d641
-name: 'Drush Site-Install'
+name: 'DevOps Drupal'
 mail: admin@example.com
 slogan: ''
 page:
