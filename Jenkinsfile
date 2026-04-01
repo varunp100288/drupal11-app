@@ -71,6 +71,16 @@ stage('SonarQube Analysis') {
             }
 }
 
+stage('OWASP Dependency Check') {
+    steps {
+        dependencyCheck additionalArguments: '--scan . --format XML --format HTML', odcInstallation: 'OWASP-DC'
+    }
+    post {
+        always {
+            dependencyCheckPublisher pattern: '**/dependency-check-report.xml'
+        }
+    }
+}
 // stage('PHPCS') {
 //     steps {
 //         sh '''
