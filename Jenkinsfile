@@ -85,6 +85,14 @@ stage('Composer Validate') {
         //         '''
         //     }
         // }
+        stage('Trivy Scan') {
+            steps {
+                sh '''
+                trivy --version
+                trivy image --severity HIGH,CRITICAL --scanners vuln --exit-code 0 drupal-apps-devops:latest
+                '''
+            }
+        }
 
         stage('Deploy Application Containers') {
             steps {
