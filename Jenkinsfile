@@ -60,6 +60,17 @@ stage('Composer Validate') {
     }
 }
 
+stage('SonarQube Analysis') {
+            steps {
+                script {
+                    def scannerHome = tool 'sonar-scanner'
+                    withSonarQubeEnv('Sonar') {
+                        sh "${scannerHome}/bin/sonar-scanner"
+                    }
+                }
+            }
+}
+
 // stage('PHPCS') {
 //     steps {
 //         sh '''
