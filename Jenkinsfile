@@ -114,7 +114,31 @@ stage('OWASP Dependency Check') {
                 '''
             }
         }
+stage('Build Docker Image') {
+    steps {
+        sh '''
+            docker build -t varunp100288/drupal11-app:latest \
+                         -t varunp100288/drupal11-app:${BUILD_NUMBER} .
+        '''
+    }
+}
 
+stage('Push Docker Image to Docker Hub') {
+    steps {
+        withCredentials([usernamePassword(
+            credentialsId: 'dockerhub-creds',
+            usernameVariable: 'DOCKERHUB_USERNAME',
+            passwordVariable: 'DOCKERHUB_TOKEN'
+        )]) {
+            sh '''
+                echo "$DOCKERHUB_TOKEN" | docker login -u "$DOCKERHUB_USERNAME" --password-stdin
+                docker push varunp100288/drupal11-app:latest
+                docker push varunp100288/drupal11-app:${BUILD_NUMBER}
+                docker logout
+            '''
+        }
+    }
+}
         stage('Deploy Application Containers') {
             steps {
                 sh '''
